@@ -41,7 +41,7 @@ return baseclass.extend({
 			);
 			for(let i of Object.values(data.cpus)) {
 				cpuTable.append(
-					E('td', { 'class': 'td left', 'data-title': _('CPU') + ' ' + i.number},
+					E('td', { 'class': 'td left' },
 						(i.sCurFreq) ? this.freqFormat(i.sCurFreq) : this.freqFormat(i.curFreq)
 					),
 				);
