@@ -16,56 +16,38 @@ return baseclass.extend({
 			return '-';
 		};
 		return (freq >= 1e6) ?
-			(freq / 1e6) + ' ' + _('GHz')
+			(freq / 1e6).toFixed(3) + ' ' + _('GHz')
 		:
-			(freq / 1e3) + ' ' + _('MHz');
+			(freq / 1e3).toFixed(1) + ' ' + _('MHz');
 	},
 
 	load() {
 		return L.resolveDefault(this.callCpuPerf(), null);
 	},
-
 	render(data) {
 		if(!data) return;
-
-		let cpuTableTitles = [
-			_('CPU'),
-			_('Current frequency'),
-			_('Minimum frequency'),
-			_('Maximum frequency'),
-			_('Scaling governor'),
-		];
-
-		let cpuTable = E('table', { 'class': 'table' },
-			E('tr', { 'class': 'tr table-titles' }, [
-				E('th', { 'class': 'th left' }, cpuTableTitles[0]),
-				E('th', { 'class': 'th left' }, cpuTableTitles[1]),
-				E('th', { 'class': 'th left' }, cpuTableTitles[2]),
-				E('th', { 'class': 'th left' }, cpuTableTitles[3]),
-				E('th', { 'class': 'th left' }, cpuTableTitles[4]),
-			])
-		);
-
+		let cpuTable = E('table', { 'class': 'table' });
 		if(data.cpus) {
+			cpuTable.append(
+				E('tr', { 'class': 'tr table-titles' })
+			);
 			for(let i of Object.values(data.cpus)) {
 				cpuTable.append(
-					E('tr', { 'class': 'tr' }, [
-						E('td', { 'class': 'td left', 'data-title': cpuTableTitles[0] }, _('CPU') + ' ' + i.number),
-						E('td', { 'class': 'td left', 'data-title': cpuTableTitles[1] },
-							(i.sCurFreq) ? this.freqFormat(i.sCurFreq) : this.freqFormat(i.curFreq)
-						),
-						E('td', { 'class': 'td left', 'data-title': cpuTableTitles[2] },
-							(i.sMinFreq) ? this.freqFormat(i.sMinFreq) : this.freqFormat(i.minFreq)
-						),
-						E('td', { 'class': 'td left', 'data-title': cpuTableTitles[3] },
-							(i.sMaxFreq) ? this.freqFormat(i.sMaxFreq) : this.freqFormat(i.maxFreq)
-						),
-						E('td', { 'class': 'td left', 'data-title': cpuTableTitles[4] }, i.governor || '-'),
-					])
+					E('th', { 'class': 'th left' }, _('CPU') + ' ' + i.number ),
+				);
+			};
+			cpuTable.append(
+				E('tr', { 'class': 'tr' })
+			);
+			for(let i of Object.values(data.cpus)) {
+				cpuTable.append(
+					E('td', { 'class': 'td left', 'data-title': _('CPU') + ' ' + i.number},
+						(i.sCurFreq) ? this.freqFormat(i.sCurFreq) : this.freqFormat(i.curFreq)
+					),
 				);
 			};
 		};
-
+		
 		if(cpuTable.childNodes.length === 1){
 			cpuTable.append(
 				E('tr', { 'class': 'tr placeholder' },
@@ -75,7 +57,6 @@ return baseclass.extend({
 				)
 			);
 		};
-
 		return cpuTable;
 	},
 });

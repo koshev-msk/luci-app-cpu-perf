@@ -70,9 +70,9 @@ return view.extend({
 			return '-';
 		};
 		return (freq >= 1e6) ?
-			(freq / 1e6) + ' ' + _('GHz')
+			(freq / 1e6).toFixed(3) + ' ' + _('GHz')
 		:
-			(freq / 1e3) + ' ' + _('MHz');
+			(freq / 1e3).toFixed(1) + ' ' + _('MHz');
 	},
 
 	updateCpuPerfData() {
